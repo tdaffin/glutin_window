@@ -8,7 +8,7 @@ extern crate input;
 extern crate window;
 extern crate shader_version;
 
-use glutin::GlContext;
+use glutin::ContextTrait;
 
 use std::collections::VecDeque;
 use std::error::Error;
@@ -43,7 +43,7 @@ pub use shader_version::OpenGL;
 /// Contains stuff for game window.
 pub struct GlutinWindow {
     /// The window.
-    pub window: glutin::GlWindow,
+    pub window: glutin::WindowedContext,
     // The back-end does not remember the title.
     title: String,
     exit_on_esc: bool,
@@ -104,7 +104,7 @@ impl GlutinWindow {
         let events_loop = glutin::EventsLoop::new();
         let title = settings.get_title();
         let exit_on_esc = settings.get_exit_on_esc();
-        let window = glutin::GlWindow::new(
+        let window = glutin::WindowedContext::new_windowed(
             window_builder_from_settings(&settings),
             context_builder_from_settings(&settings),
             &events_loop
@@ -112,7 +112,7 @@ impl GlutinWindow {
         let window = match window {
                 Ok(window) => window,
                 Err(_) => {
-                    glutin::GlWindow::new(
+                    glutin::WindowedContext::new_windowed(
                         window_builder_from_settings(&settings),
                         context_builder_from_settings(&settings.clone().samples(0)),
                         &events_loop
